@@ -11,6 +11,7 @@ CREATE TABLE empleados(
     dir_localidad       VARCHAR(100) NOT NULL,
     dir_municipio       VARCHAR NOT NULL, -- lo correcto seria un catalogo de municipios
     dir_cp              VARCHAR(20) NOT NULL,
+    dir_estado          VARCHAR NOT NULL,
     dir_no_int          VARCHAR(20),
     dir_no_ext          VARCHAR(20),
     empleado_jefe_id    INT REFERENCES empleados(id_empleado)
@@ -64,11 +65,14 @@ CREATE TABLE pagos(
 CREATE TABLE clientes(
     id_cliente      SERIAL PRIMARY KEY NOT NULL UNIQUE,
     nombre          VARCHAR NOT NULL,
+    ap_paterno      VARCHAR NOT NULL,
+    ap_materno      VARCHAR NOT NULL,
     rfc             VARCHAR(18) NOT NULL UNIQUE,
     curp            VARCHAR(18) NOT NULL UNIQUE,
     dir_calle       VARCHAR(100) NOT NULL,
     dir_localidad   VARCHAR(100) NOT NULL,
-    dir_municipio       VARCHAR NOT NULL,
+    dir_municipio   VARCHAR NOT NULL,
+    dir_estado      VARCHAR NOT NULL,
     dir_cp          VARCHAR(20) NOT NULL,
     dir_no_int      VARCHAR(20),
     dir_no_ext      VARCHAR(20),
@@ -92,6 +96,7 @@ CREATE TABLE marcas(
 CREATE TABLE autos(
     id_auto         SERIAL PRIMARY KEY NOT NULL UNIQUE,
     fecha_alta      DATE DEFAULT now(),
+    modelo          VARCHAR(50) NOT NULL,
     observaciones   TEXT,
     placas          VARCHAR(15) NOT NULL ,
     marca_id        INT REFERENCES marcas(id_marca) NOT NULL ,
@@ -106,7 +111,6 @@ CREATE TABLE ordenes_trabajos(
     subtotal            NUMERIC NOT NULL ,
     descuento           NUMERIC DEFAULT 0,
     total               NUMERIC NOT NULL ,
-    empleado_lider_id   INT REFERENCES empleados(id_empleado) NOT NULL,
     auto_id             INT REFERENCES autos(id_auto) NOT NULL
 );
 
@@ -124,16 +128,11 @@ CREATE TABLE refacciones(
     proveedor_id    INT REFERENCES proveedores(id_proveedor) NOT NULL
 );
 
-CREATE TABLE orden_trabajo_refacciones(
-    id_orden_trabjo_refaccion_id    SERIAL PRIMARY KEY NOT NULL UNIQUE,
-    costo                           NUMERIC NOT NULL,
-    refaccion_id                    INT REFERENCES refacciones(id_refaccion) NOT NULL,
-    orden_trabajo_id                INT REFERENCES ordenes_trabajos(id_orden_trabajo) NOT NULL
-);
 
 CREATE TABLE orden_trabajo_equipo(
     orden_trabajo_equipo_id     SERIAL PRIMARY KEY NOT NULL UNIQUE,
     empleado_id                 INT REFERENCES empleados(id_empleado) NOT NULL,
+    es_lider                    BOOL DEFAULT false,
     orden_trabajo_id            INT REFERENCES ordenes_trabajos(id_orden_trabajo) NOT NULL
 );
 
@@ -147,7 +146,19 @@ CREATE TABLE servicios(
 
 CREATE TABLE orden_trabajo_servicios(
     id_orden_trabajo_servicio   SERIAL PRIMARY KEY NOT NULL UNIQUE,
-    costo                       NUMERIC NOT NULL,
+    ---
     servicio_id                 INT REFERENCES servicios(id_servicio) NOT NULL,
+    subtotal_servicio           NUMERIC NOT NULL,
+    descuento_servicio          NUMERIC NOT NULL,
+    total_servicio              NUMERIC NOT NULL, --- el servicio con descuento
+    refaccion_id                INT REFERENCES refacciones(id_refaccion) NOT NULL,
+    costo_refacion_unitario     NUMERIC NOT NULL,
+    cantidad_refaciones         INT NOT NULL,
+    subtotal_refaciones         NUMERIC NOT NULL, -- total de las refacciones sin descuento
+    descuento_refaccion         NUMERIC NOT NULL,
+    costo_refacion_total        NUMERIC NOT NULL, -- total de las refaccione con descuento
+    total                       NUMERIC NOT NULL, -- es la suma del servicio total + refaciones total
     orden_trabajo_id            INT REFERENCES ordenes_trabajos(id_orden_trabajo) NOT NULL
 );
+
+
