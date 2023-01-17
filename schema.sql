@@ -15,7 +15,7 @@ CREATE TABLE empleados(
     dir_no_int          VARCHAR(20),
     dir_no_ext          VARCHAR(20),
     empleado_jefe_id    INT REFERENCES empleados(id_empleado)
-);
+);  
 
 CREATE TABLE ingenieros(
     id_ingeniero    SERIAL PRIMARY KEY NOT NULL UNIQUE,
@@ -47,7 +47,7 @@ CREATE TABLE administrativos(
 
 CREATE TABLE administrativo_estudios(
     id_adminstrativo_estudio    SERIAL PRIMARY KEY NOT NULL UNIQUE,
-    curso_estudio               VARCHAR,
+    curso_estudio               VARCHAR NOT NULL,
     descripción                 TEXT,
     administrativo_id           INT REFERENCES administrativos(id_administrativo) NOT NULL
 );
@@ -84,18 +84,18 @@ create table cliente_contactos(
     id_cliente_contacto SERIAL PRIMARY KEY NOT NULL UNIQUE,
     nombre              VARCHAR NOT NULL,
     telefono            VARCHAR(15) NOT NULL,
-    email               VARCHAR(100) NOT NULL,
+    email               VARCHAR(100) NOT NULL UNIQUE,
     cliente_id          INT REFERENCES clientes(id_cliente) NOT NULL
 );
 
 CREATE TABLE marcas(
     id_marca    SERIAL PRIMARY KEY NOT NULL UNIQUE,
-    nombre      VARCHAR
+    nombre      VARCHAR NOT NULL UNIQUE
 );
 
 CREATE TABLE autos(
     id_auto         SERIAL PRIMARY KEY NOT NULL UNIQUE,
-    fecha_alta      DATE DEFAULT now(),
+    fecha_alta      DATE DEFAULT now() NOT NULL,
     modelo          VARCHAR(50) NOT NULL,
     observaciones   TEXT,
     placas          VARCHAR(15) NOT NULL ,
@@ -117,7 +117,7 @@ CREATE TABLE ordenes_trabajos(
 
 CREATE TABLE proveedores(
     id_proveedor        SERIAL PRIMARY KEY NOT NULL UNIQUE,
-    nombre              VARCHAR NOT NULL,
+    nombre              VARCHAR NOT NULL UNIQUE,
     observaciones       TEXT
 );
 
@@ -141,7 +141,7 @@ CREATE TABLE servicios(
     id_servicio SERIAL PRIMARY KEY NOT NULL UNIQUE,
     nombre      VARCHAR NOT NULL,
     descripcion TEXT NOT NULL,
-    costo       NUMERIC
+    costo       NUMERIC NOT NULl
 );
 
 CREATE TABLE orden_trabajo_servicios(

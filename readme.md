@@ -33,6 +33,9 @@ TODO
 ## Descripción de tablas
 
 ### empleados
+**Atributos:**
+
+![entidad empleado](./entidades/empleado.drawio.png)
 
 **Objetivo:** Son todos los empleados que pertenecen al taller mecanico, su informacion personal y dirección
 
@@ -54,7 +57,7 @@ TODO
 | dir_no_ext         | varchar      | 20       | no. exterior o otro similar   |                                                         |
 | empleado_jefe_id   | int          | default  | ID del empleado que su jefe   | hace referencia a si mismo para indicar su jefe         |
 
-**dispadores:**
+**disparadores:**
 
 **SQL:**
 ```postgresql
@@ -80,6 +83,10 @@ CREATE TABLE empleados(
 ```
 ### ingenieros
 
+**atributos:**
+
+![ingeniero](./entidades/Ingeniero.drawio.png)
+
 **Objetivo:** Es para aquellos empleados que son ingenieros y sus atributos extras, es decir, empleados especializados
 
 | Nombre        | Tipo de dato | Longitud | Descripción                             | Restriccion                                                             |
@@ -90,7 +97,7 @@ CREATE TABLE empleados(
 | fecha_egreso  | date         |          | feche en la que egreso                  | 1) no nulo                                                              |
 | empleado_id   | int          |          | referencia del empleado especializado   | 1) no nulo, 2) hace referencia  la tabla de empleados con id _empleado  | 
 
-**dispadores:**
+**disparadores:**
 
 **SQL:**
 ```postgresql
@@ -106,13 +113,17 @@ CREATE TABLE ingenieros(
 
 **Objetivo:** Para los empleados que son _especializados_ en técnicos
 
+**atributos**
+
+![tecnico](./entidades/tecnico.drawio.png)
+
 | Nombre        | Tipo de dato | Longitud | Descripción               | Restriccion                                                            |
 |---------------|--------------|----------|---------------------------|------------------------------------------------------------------------|
 | id_tecnico    | serial       | -        | identificador de la tabla | 1) valor unico,<br/> 2) no nulo <br/> 3) llave primaria                |
 | observaciones | TEXT         |          | observaciones extras      | -                                                                      |
 | empleado_id   | INT          |          | referencia a empleados    | 1) no nulo <br/> 2) referencia a la tabla de empleados con id_empleado |
 
-**dispadores:**
+**disparadores:**
 
 **SQL:**
 ```postgresql
@@ -127,13 +138,17 @@ CREATE TABLE tecnicos(
 
 **Objetivo:** almacena las habilidades que tiene el técnico (empleado especializado)
 
+**atributos:** 
+
+![tecnico habilidades](./entidades/tecnico_habilidades.drawio.png)
+
 | Nombre               | Tipo de dato | Longitud | Descripción                                     | Restriccion                                                             |
 |----------------------|--------------|----------|-------------------------------------------------|-------------------------------------------------------------------------|
 | id_tecnico_habilidad | serial       | -        | identificador de la tabla                       | 1) valor unico,<br/> 2) no nulo <br/> 3) llave primaria                 |
 | habilidad            | VARCHAR      | max      | que habilidad es                                | 1) no nulo                                                              |
 | tecnico_id           | INT         |          | la llave del tecnico que pertece la habilidad   | 1) no nulo <br/> 2) referencias con la tabla de tecnicos con id_tecnico |
 
-**dispadores:**
+**disparadores:**
 
 **SQL:**
 ```postgresql
@@ -145,6 +160,10 @@ CREATE TABLE tecnico_habilidades(
     tecnico_id              INT REFERENCES tecnicos(id_tecnico)
 );
 ```
+### administrativos
+**atributos:**
+
+![administrativo](./entidades/administrativo.drawio.png)
 
 **Objetivo:** Almacenar los empleados especializado como administrativos
 
@@ -155,7 +174,7 @@ CREATE TABLE tecnico_habilidades(
 | empleado_id      | INT          |          | id del empleado que se especializo   | 1) no null 2) <br/> 2) referencia a la table de empleados con id_empleado |
 |
 
-**dispadores:**
+**disparadores:**
 
 **SQL:**
 ```postgresql
@@ -169,6 +188,11 @@ CREATE TABLE administrativos(
 
 **Objetivo:** Almacenar los estudios de los administrativos
 
+**atributos:**
+
+![administrativo estudios](./entidades/administrativo_estudios.drawio.png)
+
+
 | Nombre               | Tipo de dato | Longitud | Descripción                      | Restriccion                                                |
 |----------------------|--------------|----------|----------------------------------|------------------------------------------------------------|
 | id_administrativo_id | serial       | -        | identificador de la tabla        | 1) valor unico,<br/> 2) no nulo <br/> 3) llave primaria    |
@@ -176,7 +200,7 @@ CREATE TABLE administrativos(
 | descripcion          | TEXT         |          | descripción extra sobre el curso |                                                            |
 | administrativo_id    | INT          |          | id del empleado especializado    | 1) no nulo <br/> 2) referencia a empleados con id_empleado |
 
-**dispadores:**
+**disparadores:**
 
 **SQL:**
 ```postgresql
@@ -193,6 +217,9 @@ CREATE TABLE administrativo_estudios(
 
 **Objetivo:** Almacenar el historico de pagos de los empleados
 
+**atributos** 
+
+![pagos](./entidades/pagos.drawio.png)
 
 | Nombre        | Tipo de dato | Longitud | Descripción                         | Restriccion                                             |
 |---------------|--------------|----------|-------------------------------------|---------------------------------------------------------|
@@ -204,7 +231,7 @@ CREATE TABLE administrativo_estudios(
 | fecha_pago    | DATE         |          | fecha cuando se realizo el pago     | 1) default hoy (now())                                  |
 | empleado_id   | INT          |          | id del empleado que se pago         | 1) no null <br/> 2) hace a empleados con id_empleado    |
 
-**dispadores:**
+**disparadores:**
 
 **SQL:**
 ```postgresql
@@ -222,12 +249,17 @@ CREATE TABLE pagos(
 
 **Objetivo:** Almacenar el Cátalogo de marcas
 
+**Atributos:** 
+
+![marcas](./entidades/marcas.drawio.png)
+
+
 | Nombre   | Tipo de dato | Longitud | Descripción               | Restriccion                                              |
 |----------|--------------|----------|---------------------------|----------------------------------------------------------|
 | id_marca | serial       | -        | identificador de la tabla | 1) valor unico,<br/> 2) no nulo <br/> 3) llave primaria  |
 | nombre   | VARCHAR      | max      | nombre de la marca        | 1) no nulo <br/> 2) valor unico                          |
 
-**dispadores:**
+**disparadores:**
 - Evitar que se pueda modificar los datos de la tabla
 
 **SQL:**
@@ -239,7 +271,11 @@ CREATE TABLE marcas(
 ```
 ### autos
 
-**Objetivo:**
+**Objetivo:** almacener los autos de los clientes
+
+**Atributos:** 
+
+![auto](./entidades/autos.drawio.png)
 
 | Nombre        | Tipo de dato | Longitud | Descripción                                     | Restriccion                                              |
 |---------------|--------------|----------|-------------------------------------------------|----------------------------------------------------------|
@@ -251,7 +287,7 @@ CREATE TABLE marcas(
 | marca_id      | INT          |          | referencia a que es este carro                  | 1) no nulo <br/> 2) referencia a marcas con id_marca     |
 | cliente_id    | INT          |          | referencia al id cliente que pertence el carro  | 2) no nulo <br/> 2) referencia a clientes con id_cliente |
 
-**dispadores:**
+**disparadores:**
 - evitar la modificacion del campo fecha_alta
 
 **SQL:**
@@ -270,6 +306,10 @@ CREATE TABLE autos(
 
 **Objetivo:** Almacenar a los clientes que se les atiende
 
+**Atributos:**
+
+![clinetes](./entidades/clientes.drawio.png)
+
 | Nombre        | Tipo de dato | Longitud | Descripción                 | Restriccion                                             |
 |---------------|--------------|----------|-----------------------------|---------------------------------------------------------|
 | id_cliente    | serial       | -        | identificador de la tabla   | 1) valor unico,<br/> 2) no nulo <br/> 3) llave primaria |
@@ -285,7 +325,7 @@ CREATE TABLE autos(
 | dir_no_ext    | VARCHAR      | 20       | no. exterior o otro similar |                                                         |
 | observacion   | TEXT         |          | observacione opcionales     |                                                         |
 
-**dispadores:**
+**disparadores:**
 
 **SQL:**
 ```postgresql
@@ -308,8 +348,11 @@ CREATE TABLE clientes(
 ```
 ### clientes_contactos
 
-
 **Objetivo:** Almacena los contactos de un cliente
+
+**Atributos:**
+
+![cliente contactos](./entidades/cliente_contactos.drawio.png)
 
 | Nombre              | Tipo de dato | Longitud | Descripción                              | Restriccion                                                         |
 |---------------------|--------------|----------|------------------------------------------|---------------------------------------------------------------------|
@@ -320,7 +363,7 @@ CREATE TABLE clientes(
 | cliente_id          | INT          |          | id cliente quien pertenece el contacto   | 1) no nulo <br/> 2) referenci a la tabla de clientes con id_cliente |
 
 
-**dispadores:**
+**disparadores:**
 
 **SQL:**
 ```postgresql
@@ -334,8 +377,13 @@ create table cliente_contactos(
 ```
 ### proveedores
 
-
 **Objetivo:** Almacena a nuestro proveedores
+
+**Atributos:**
+
+![proveedores](./entidades/proveedores.drawio.png)
+
+Nota: pudo tener mas campos, para lo solictado solo se ocuparon como un cátalogo sencillo 
 
 | Nombre         | Tipo de dato | Longitud | Descripción                | Restriccion                                             |
 |----------------|--------------|----------|----------------------------|---------------------------------------------------------|
@@ -343,7 +391,7 @@ create table cliente_contactos(
 | nombre         | VARCHAR      | max      | nombre del proveedor       | 1) no nulo <br/> 2) valor unico                         |
 | observaciones  | TEXT         |          | observaciones opcionales   |                                                         | 
 
-**dispadores:**
+**disparadores:**
 
 **SQL:**
 ```postgresql
@@ -355,8 +403,12 @@ CREATE TABLE proveedores(
 ```
 ### refacciones
 
-
 **Objetivo:** Cátalogo de proveedores
+
+**Atributos:**
+
+![refacciones](./entidades/refacciones.drawio.png)
+
 
 | Nombre         | Tipo de dato | Longitud | Descripción                           | Restriccion                                                     |
 |----------------|--------------|----------|---------------------------------------|-----------------------------------------------------------------|
@@ -365,7 +417,7 @@ CREATE TABLE proveedores(
 | costo          | NUMERIC      |          | costo en su momomento de la refaccion | 1) valor no nulo <br/> 2) mayor a cero                          |
 | proveedor_id   | INT          |          | referencia del quien lo provee        | 1) no nulo <br/> 2) referencia con proveedores con id_proveedor |
 
-**dispadores:**
+**disparadores:**
 
 **SQL:**
 ```postgresql
@@ -378,8 +430,11 @@ CREATE TABLE refacciones(
 ```
 ### servicios
 
-
 **Objetivo:** Cátalgo de servicios
+
+**Atributos:**
+
+![servicios](./entidades/servicios.drawio.png)
 
 | Nombre      | Tipo de dato | Longitud | Descripción                        | Restriccion                                             |
 |-------------|--------------|----------|------------------------------------|---------------------------------------------------------|
@@ -388,7 +443,7 @@ CREATE TABLE refacciones(
 | descripcion | TEXT         | max      | descripcion de la refaccion        | 1) no nulo                                              |
 | costo       | NUMERIC      |          | costo del servicio en su momento   | 1) no nulo <br/> 2) mayor a cero                        |
 
-**dispadores:**
+**disparadores:**
 
 **SQL:**
 ```postgresql
@@ -401,8 +456,12 @@ CREATE TABLE servicios(
 ```
 ### orden_trabajo
 
-
 **Objetivo:** Almacena los trabajos realizados hacia un carro de un cliente
+
+**Atributos:**
+
+![orden trabajo](./entidades/orden_trabajo.drawio.png)
+
 
 | Nombre           | Tipo de dato | Longitud | Descripción                         | Restriccion                                             |
 |------------------|--------------|----------|-------------------------------------|---------------------------------------------------------|
@@ -415,7 +474,7 @@ CREATE TABLE servicios(
 | total            | NUMERIC      |          | el (subtotal + iva) - descuento     | 1) no nulo                                              |
 | auto_id          | INT          |          | referencia al auto que se trabaja   | 1) no nulo <br/> 2) referencia a autos con id_auto      |
 
-**dispadores:**
+**disparadores:**
 
 **SQL:**
 ```postgresql
@@ -432,8 +491,11 @@ CREATE TABLE ordenes_trabajos(
 ```
 ### orden_trabajo_equipo
 
+**Objetivo:** Almacena a los empleados que van a trabajar son un orden de trabajo
 
-**Objetivo:** Almacena a los empleados que van a trabajar son un orden de trabajo 
+**Atributos:**
+
+![orden de trabajo equipo](./entidades/orden_trabajo_equipo.drawio.png)
 
 | Nombre                  | Tipo de dato | Longitud | Descripción                        | Restriccion                                                          |
 |-------------------------|--------------|----------|------------------------------------|----------------------------------------------------------------------|
@@ -442,7 +504,7 @@ CREATE TABLE ordenes_trabajos(
 | es_lider                | BOOLEAN      |          | indica si este miembro es el lider | 1) valor por defecto false                                           |
 | orden_trabajo_id        | INT          |          | referencia a la orden de trabajo   | 1) no nulo <br/> 2) referencia a orden_trabajos con id_orden_trabajo |
 
-**dispadores:**
+**disparadores:**
 
 **SQL:**
 ```postgresql
@@ -456,8 +518,11 @@ CREATE TABLE orden_trabajo_equipo(
 ```
 ### orden_trabajo_servicios
 
-
 **Objetivo:** Almacena los servicios realizados a una orden de trabajo y por ende al carro, asi como refacciones usadas
+
+**Atributos:**
+
+![orden trabajo servicios](./entidades/orden_trabajo_servicios.drawio.png)
 
 | Nombre                    | Tipo de dato | Longitud | Descripción                                     | Restriccion                                                           |
 |---------------------------|--------------|----------|-------------------------------------------------|-----------------------------------------------------------------------|
@@ -474,7 +539,7 @@ CREATE TABLE orden_trabajo_equipo(
 | costo_refaccion_total     | NUMERIC      |          | es total de refacciones + total de serivicios   | 1) no nulo  <br/> 2) mayor a cero                                     |
 | orden_trabajo_id          | INT          |          | referencia a la roden de trabajo                | 1) no nulo <br/> 2) referencia a ordenes_trabajo con id_orden_trabajo |
 
-**dispadores:** evitar modificar la tabla y valores calculados
+**disparadores:** evitar modificar la tabla y valores calculados
 
 ## SQL
 ```postgresql
